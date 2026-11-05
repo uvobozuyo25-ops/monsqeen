@@ -263,6 +263,7 @@ const SURVEY = [
     "type": "radio",
     "label": "المستوى المسجل عليه",
     "required": true,
+    "showIf": {"id": "riwaq_type", "values": ["طفل", "تجويد", "قراءات"]},
     "options": [
      "الأول",
      "الثاني",
@@ -274,6 +275,22 @@ const SURVEY = [
      "الثامن",
      "التاسع",
      "العاشر"
+    ]
+   },
+   {
+    "id": "level_adults",
+    "type": "radio",
+    "label": "المستوى المسجل عليه",
+    "required": true,
+    "showIf": {"id": "riwaq_type", "values": ["كبار"]},
+    "options": [
+     "العام الواحد",
+     "العامان",
+     "ثلاث سنوات",
+     "أربع سنوات من البقرة",
+     "أربع سنوات من الناس",
+     "خمس سنوات من البقرة",
+     "خمس سنوات من الناس"
     ]
    },
    {
@@ -707,7 +724,8 @@ $("#form").addEventListener("submit", async e => {
   const data = { "الوقت": new Date().toISOString(), "الفئة": ROLE };
   flat.forEach(q => {
     const key = q.label.replace(/\s*\(اختياري\)\s*$/, "");
-    data[key] = visible(q) ? getValue(q) : "";
+    if (visible(q)) data[key] = getValue(q);
+    else if (!(key in data)) data[key] = "";
   });
 
   const btn = $("#submitBtn");
